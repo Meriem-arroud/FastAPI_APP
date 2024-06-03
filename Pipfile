@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+fastapi = "==0.111.0"
+pydantic_settings = "*"
+sqlalchemy = "*"
+sqlalchemy_crud_plus = "*"
+asyncpg = "*"
+alembic = "*"
+greenlet = "*"
+uvicorn= "*"
+shortuuid = "*"
+
+
+
+[dev-packages]
+
+[requires]
+python_version = "3.11"
