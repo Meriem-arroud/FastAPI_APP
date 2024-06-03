@@ -1,5 +1,6 @@
 from typing import Union
 from fastapi import APIRouter, HTTPException, Response, status
+from fastapi_pagination import Page, paginate
 from app.model.product import Product
 from app.schema.product_schema import ProductCreate, ProductUpdate
 from app.service.product_svc import product_service
@@ -12,8 +13,9 @@ async def read_product(product_id: str):
 
 
 @router.get("", status_code=status.HTTP_200_OK)
-async def read_all_products():
-    return await product_service.get_products_list()
+async def read_all_products() -> Page[Product]:
+    Product_list = await product_service.get_products_list()
+    return paginate(Product_list)
 
 
 @router.post("/create", status_code=status.HTTP_201_CREATED)
