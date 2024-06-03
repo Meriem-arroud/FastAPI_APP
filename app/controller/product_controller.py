@@ -14,8 +14,8 @@ async def read_product(product_id: str):
 
 @router.get("", status_code=status.HTTP_200_OK)
 async def read_all_products() -> Page[Product]:
-    Product_list = await product_service.get_products_list()
-    return paginate(Product_list)
+    product_list = await product_service.get_products_list()
+    return paginate(product_list)
 
 
 @router.post("/create", status_code=status.HTTP_201_CREATED)
