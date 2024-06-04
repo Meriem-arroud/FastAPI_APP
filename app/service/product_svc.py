@@ -1,5 +1,6 @@
-from fastapi import HTTPException
+from fastapi.encoders import jsonable_encoder
 from app.dao.product_dao import product_dao
+from app.helpers.redis_cache import cache
 from app.model.product import Product
 from app.schema.product_schema import ProductCreate, ProductUpdate
 from database.db_postgress import async_session
@@ -10,16 +11,17 @@ class ProductService:
     async def get_product_info(product_id: str) -> Product:
         async with async_session.begin() as session:
             product = await product_dao.select_model_by_id(session, pk=product_id)
-            if not product:
-                raise HTTPException(status_code=404, detail="Product not found!")
             return product      
          
 
     @staticmethod
-    async def get_products_list() -> list[Product]:
+    @cache(ttl=60)
+    async def get_products_list():
          async with async_session.begin() as session:
             products_list= await product_dao.select_models(session)
-            return products_list       
+            products_json = jsonable_encoder(products_list)
+            print("use service --------------------------------", type(products_json))
+            return products_json       
           
 
     @staticmethod
