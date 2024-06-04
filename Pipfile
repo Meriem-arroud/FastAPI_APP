@@ -13,7 +13,6 @@ alembic = "*"
 greenlet = "*"
 uvicorn= "*"
 shortuuid = "*"
-fastapi-pagination = "*"
 
 
 

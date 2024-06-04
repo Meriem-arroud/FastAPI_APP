@@ -1,4 +1,4 @@
-from sqlalchemy import update
+from sqlalchemy import func, select, update
 from app.model.product import Product
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy_crud_plus import CRUDPlus
@@ -6,7 +6,19 @@ from sqlalchemy_crud_plus import CRUDPlus
 from app.schema.product_schema import ProductCreate, ProductUpdate
 
 
-class ProductDAO(CRUDPlus[Product]):    
+class ProductDAO(CRUDPlus[Product]):
+    async def count(self, session: AsyncSession) -> int:
+        query = await session.execute(func.count(self.model.id))
+        return query.scalar()
+
+
+    async def get_all(self, session: AsyncSession, limit: int,
+                      offset: int) -> list[Product]:
+        query = await session.execute(
+            select(self.model).limit(limit).offset(offset))
+        return query.scalars().all()
+
+
     async def create(self, session: AsyncSession, product_data : ProductCreate) -> Product:
         """
         Create product 

@@ -4,10 +4,12 @@ import os
 from functools import wraps
 from hashlib import sha256
 
+from settings import settings
+
 class RedisCache:
     def __init__(self):
-        self.redis_host = os.getenv("REDIS_HOST", "localhost")
-        self.redis_port = os.getenv("REDIS_PORT", 6379)
+        self.redis_host = settings.REDIS_HOST
+        self.redis_port = settings.REDIS_PORT
         self.redis_client = redis.Redis(host=self.redis_host, port=self.redis_port, db=0, decode_responses=True)
 
     def _generate_key(self, func_name: str, *args, **kwargs):
