@@ -8,20 +8,26 @@ from database.db_postgress import async_session
 
 class ProductService:
     @staticmethod
+    @cache(ttl=60)
     async def get_product_info(product_id: str) -> Product:
         async with async_session.begin() as session:
             product = await product_dao.select_model_by_id(session, pk=product_id)
             return product      
-         
 
     @staticmethod
     @cache(ttl=60)
-    async def get_products_list():
-         async with async_session.begin() as session:
-            products_list= await product_dao.select_models(session)
-            products_json = jsonable_encoder(products_list)
-            print("use service --------------------------------", type(products_json))
-            return products_json       
+    async def get_products_count() -> int:
+        async with async_session.begin() as session:
+            products_count = await product_dao.count(session)
+            return products_count       
+
+
+    @staticmethod
+    @cache(ttl=60)
+    async def get_products_list(limit: int, offset: int) -> list[Product]:
+        async with async_session.begin() as session:
+            products_list = await product_dao.get_all(session, limit, offset)
+            return jsonable_encoder(products_list)     
           
 
     @staticmethod

@@ -23,5 +23,3 @@ class ProductOut(ProductCreate):
     reviews: int
     isBestSeller: bool
 
-    class Config:
-        orm_mode = True
