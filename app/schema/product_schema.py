@@ -17,5 +17,11 @@ class ProductUpdate(BaseModel):
     category_id: Optional[int] = None
     isBestSeller: Optional[bool] = False    
 
+class ProductOut(ProductCreate):
+    id: str
+    stars: float
+    reviews: int
+    isBestSeller: bool
+
     class Config:
         orm_mode = True
