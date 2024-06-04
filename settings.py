@@ -17,17 +17,13 @@ class Settings(BaseSettings):
     POSTGRES_DB_NAME :str
     POSTGRES_USER :str
     POSTGRES_PASSWORD :str
-    POSTGRES_SSL_MODE :str
-    POSTGRES_CONNECT_TIMEOUR :int
 
     POSTGRESQL_ECHO: bool = False
     # MYSQL_CHARSET: str = 'utf8mb4'
 
-    # # Env Redis
-    # REDIS_HOST: str
-    # REDIS_PORT: int
-    # REDIS_PASSWORD: str
-    # REDIS_DATABASE: int
+    # Env Redis
+    REDIS_HOST: str
+    REDIS_PORT: int
 
     # FastAPI
     API_V1_STR: str = '/api/v1'
