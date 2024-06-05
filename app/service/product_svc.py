@@ -38,9 +38,10 @@ class ProductService:
 
 
     @staticmethod
-    async def delete_product(product_id: str) -> None:
+    async def delete_product(product_id: str) -> int:
         async with async_session.begin() as session:
-            await product_dao.delete_model(session, pk=product_id)  
+            deleted_rows_count = await product_dao.delete_model(session, pk=product_id)
+            return deleted_rows_count
 
 
     @staticmethod

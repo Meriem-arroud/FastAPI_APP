@@ -9,12 +9,19 @@ router = APIRouter(prefix="/products")
 
 @router.get("/{product_id}", status_code=status.HTTP_200_OK)
 async def read_product(product_id: str, response: Response):
+    """
+    Get product by ID
+
+    Parameters:
+    product_id (str): ID of product
+
+    """
     try:
         product =  await product_service.get_product_info(product_id=product_id)
         if product is None:
             response.status_code= status.HTTP_404_NOT_FOUND
             return {"status": "Failed", "message": "product ID not found"}
-        else : return  product 
+        return  product 
     except Exception as e: 
         response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
@@ -22,12 +29,15 @@ async def read_product(product_id: str, response: Response):
 
 @router.get("", status_code=status.HTTP_200_OK)
 async def read_all_products(response:Response, offset: int = 0, limit: int = 50):
+
     """
-    Get all products
-    :param response:
-    :param offset:
-    :param limit:
-    :return:"""
+    Get all products 
+
+    Parameters:
+    offset (int)
+    limit (int)
+
+    """
 
     try:
         products_count = await product_service.get_products_count()
@@ -42,8 +52,11 @@ async def read_all_products(response:Response, offset: int = 0, limit: int = 50)
 async def create_product(product_data: ProductCreate, response: Response):
     """
     Create new product
-    :param product_data:
-    :return:"""
+
+    Parameters:
+    product_data (ProductCreate): Product data
+    
+    """
     try:
         new_product = await product_service.create_product(product_data=product_data)
         return {"status": "succeeded", "message": f"Product successfully created;  New product ID :{new_product.id}"}
@@ -56,49 +69,65 @@ async def create_product(product_data: ProductCreate, response: Response):
 async def delete_product(product_id: str, response: Response):
     """
     Delete product by product ID
-    :param product_id:
-    :return:"""
+
+    Parameters:
+    product_id (str)
+    
+    """
     try:
-        await product_service.delete_product(product_id=product_id)
-        return {"status": "succeeded", "message": "Product successfully deleted"}
+        deleted_rows_count = await product_service.delete_product(product_id=product_id)
+        if deleted_rows_count > 0:
+            return {"status": "succeeded", "message": "Product successfully deleted"}
+        else:
+            response.status_code=status.HTTP_404_NOT_FOUND
+            return {"status": "Failed", "message": f"ID {product_id} not found in Products table"}
     except Exception as e:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+        response.status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
 
 @router.put("/{product_id}", status_code=status.HTTP_201_CREATED)
 async def update_product(product_id: str, product_data: ProductCreate, response:Response):
     """
     Update product by product ID
-    :param product_id:
-    :param product_data:
-    :return:"""
+
+    Parameters:
+    product_id (str)
+    product_data (ProductCreate): Contains the required fields to update the entire product
+    
+    """
     try:
         updated_rows_count = await product_service.update_product(product_id=product_id, product_data=product_data)
         if updated_rows_count > 0:
-            return {"status": "succeeded", "message": f"Product successfully updated! {updated_rows_count} row has been updated"}
+            return {"status": "succeeded", "message": f"Product successfully updated!"}
         else:
             response.status_code=status.HTTP_404_NOT_FOUND
             return {"status": "Failed", "message": f"ID {product_id} not found in Products table"}
     except Exception as e:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e)) 
+        response.status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e)) 
 
 
 @router.patch("/{product_id}", status_code=status.HTTP_200_OK)
 async def partial_update_product(product_id: str, product_data: ProductUpdate, response:Response):
     """
-    Update portion of product by product ID
-    :param product_id:
-    :param product_data:
-    :return:"""
+    Update product by product ID
+
+    Parameters:
+    product_id (str)
+    product_data (ProductCreate) : Contains only the field(s) the user wants to update 
+    
+    """
     try:
         updated_rows_count = await product_service.update_product(product_id=product_id, product_data=product_data)
         if updated_rows_count > 0:
-            return {"status": "succeeded", "message": f"Product successfully updated! {updated_rows_count} row has been updated"}
+            return {"status": "succeeded", "message": f"Product successfully updated!"}
         else:
             response.status_code=status.HTTP_404_NOT_FOUND
             return {"status": "Failed", "message": f"ID {product_id} not found in Products table"}
     except Exception as e:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))   
+        response.status_code=status.HTTP_500_INTERNAL_SERVER_ERROR
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))   
 
 
 
