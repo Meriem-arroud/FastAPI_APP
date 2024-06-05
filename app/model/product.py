@@ -29,8 +29,6 @@ class Product(Base):
     reviews: Mapped[int] = mapped_column(Integer(), init=False, default=0)
     category_id: Mapped[int | None] = mapped_column(ForeignKey('categories.id', ondelete='SET NULL'), default=None)
     isBestSeller: Mapped[bool] = mapped_column(Boolean(), init=False, default=False)
-    #category: Mapped[Union['Category', None]] = relationship(init=False, backref='products', default=None)
-
 
     
 
