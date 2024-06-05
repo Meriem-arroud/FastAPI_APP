@@ -27,9 +27,9 @@ class Settings(BaseSettings):
 
     # FastAPI
     API_V1_STR: str = '/api/v1'
-    TITLE: str = 'FastAPIDemoApp'
+    TITLE: str = 'FastAPI App'
     VERSION: str = '0.0.1'
-    DESCRIPTION: str = 'Demo App'
+    DESCRIPTION: str = 'Product Management App'
     DOCS_URL: str | None = f'{API_V1_STR}/docs'
     REDOCS_URL: str | None = f'{API_V1_STR}/redocs'
     OPENAPI_URL: str | None = f'{API_V1_STR}/openapi'

@@ -12,7 +12,7 @@ class ProductService:
     async def get_product_info(product_id: str) -> Product:
         async with async_session.begin() as session:
             product = await product_dao.select_model_by_id(session, pk=product_id)
-            return product      
+            return jsonable_encoder(product)     
 
     @staticmethod
     @cache(ttl=60)

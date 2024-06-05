@@ -7,15 +7,27 @@ from app.schema.product_schema import ProductCreate, ProductUpdate
 
 
 class ProductDAO(CRUDPlus[Product]):
+
     async def count(self, session: AsyncSession) -> int:
+        """
+        Count all products
+        :param session:
+        :return:
+        """
         query = await session.execute(func.count(self.model.id))
         return query.scalar()
-
+    
 
     async def get_all(self, session: AsyncSession, limit: int,
                       offset: int) -> list[Product]:
-        query = await session.execute(
-            select(self.model).limit(limit).offset(offset))
+        """
+        Get all products
+        :param session:
+        :param limit:
+        :param offset:
+        :return:
+        """
+        query = await session.execute(select(self.model).limit(limit).offset(offset))
         return query.scalars().all()
 
 
