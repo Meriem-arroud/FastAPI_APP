@@ -18,8 +18,7 @@ class ProductDAO(CRUDPlus[Product]):
         return query.scalar()
     
 
-    async def get_all(self, session: AsyncSession, limit: int,
-                      offset: int) -> list[Product]:
+    async def get_all(self, session: AsyncSession, limit: int, offset: int) -> list[Product]:
         """
         Get all products
         :param session:
@@ -38,12 +37,15 @@ class ProductDAO(CRUDPlus[Product]):
         :param product_data:
         :return:
         """
+
+        # model_dump will turn the product_data object into a dictionary that will be passed 
+        # as kwargs to the Product constructor 
         product_data= product_data.model_dump()
         product_data.update({
             "imgUrl": str(product_data.get("imgUrl"))
         })
-        new_product = self.model(**product_data)
-        session.add(new_product)
+        new_product = self.model(**product_data) # Product(**product_data)
+        session.add(new_product) # This will insert the newly created product into the products table
         return new_product
     
 
@@ -55,6 +57,11 @@ class ProductDAO(CRUDPlus[Product]):
         :param product_data:
         :return:
         """
+        # model_dump will turn the product_data object into a dictionary that will be passed 
+        # as kwargs to the sqlalchemy values method
+
+        # exclude_unset=True will exclude any fields that are not set in the product_data object
+        # will keep only the fields that were specified by the user.
         product_data = product_data.model_dump(exclude_unset=True)
         if "imgUrl" in product_data:
             product_data.update({
