@@ -32,6 +32,7 @@ pipenv install --dev
 
 # Create model tables in postgres database
 ```
+pipenv run alembic init -t async alembic ----> initializes a new Alembic environment for database migrations
 pipenv run alembic revision --autogenerate -m "Add Product model"
 pipenv run alembic upgrade head
 ```
