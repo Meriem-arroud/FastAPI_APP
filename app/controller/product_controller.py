@@ -1,8 +1,6 @@
-from typing import Union
 from fastapi import APIRouter, HTTPException, Response, status
-from app.model.product import Product
 from app.schema.pagination_schema import PaginationResponseSchema
-from app.schema.product_schema import ProductCreate, ProductOut, ProductUpdate
+from app.schema.product_schema import ProductCreate, ProductUpdate
 from app.service.product_svc import product_service
 
 router = APIRouter(prefix="/products")
@@ -38,7 +36,6 @@ async def read_all_products(response:Response, offset: int = 0, limit: int = 50)
     limit (int)
 
     """
-
     try:
         products_count = await product_service.get_products_count()
         products_list = await product_service.get_products_list(limit=limit, offset=offset)

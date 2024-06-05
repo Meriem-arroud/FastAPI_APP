@@ -1,6 +1,3 @@
-from functools import lru_cache
-from typing import Literal
-from pydantic import model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pathlib import Path
 
@@ -19,7 +16,6 @@ class Settings(BaseSettings):
     POSTGRES_PASSWORD :str
 
     POSTGRESQL_ECHO: bool = False
-    # MYSQL_CHARSET: str = 'utf8mb4'
 
     # Env Redis
     REDIS_HOST: str
@@ -34,11 +30,7 @@ class Settings(BaseSettings):
     REDOCS_URL: str | None = f'{API_V1_STR}/redocs'
     OPENAPI_URL: str | None = f'{API_V1_STR}/openapi'
 
-    # DateTime
-    DATETIME_TIMEZONE: str = 'Africa/Casablanca'
 
-
-#@lru_cache
 def get_settings() -> Settings:
     """method to retreive settings from the .env file"""
     return Settings()
