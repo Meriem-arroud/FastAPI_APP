@@ -15,4 +15,4 @@ class Category(Base):
     __tablename__ = 'categories'
     
     id: Mapped[id_key] = mapped_column(init=False)
-    category_name: Mapped[str] = mapped_column(String(100), init=False)
+    category_name: Mapped[str] = mapped_column(String(100))

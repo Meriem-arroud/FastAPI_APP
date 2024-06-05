@@ -21,15 +21,15 @@ class Product(Base):
 
     __tablename__ = 'products'
 
-    id: Mapped[id_key] = mapped_column(init=False, comment='Product ID from Amazon') 
+    id: Mapped[id_key] = mapped_column(init=False, comment='Product ID from Amazon')
     title: Mapped[str] = mapped_column(String(500))
     imgUrl: Mapped[str] = mapped_column(String(100))
     price: Mapped[float] = mapped_column(Float())
-    stars: Mapped[float] = mapped_column(Float(), default=0)
-    reviews: Mapped[int] = mapped_column(Integer(), default=0)
+    stars: Mapped[float] = mapped_column(Float(), init=False, default=0) 
+    reviews: Mapped[int] = mapped_column(Integer(), init=False, default=0)
     category_id: Mapped[int | None] = mapped_column(ForeignKey('categories.id', ondelete='SET NULL'), default=None)
-    isBestSeller: Mapped[bool] = mapped_column(Boolean(), default=False)
-   #category: Mapped[Union['Category', None]] = relationship(init=False, backref='products', default=None)
+    isBestSeller: Mapped[bool] = mapped_column(Boolean(), init=False, default=False)
+    #category: Mapped[Union['Category', None]] = relationship(init=False, backref='products', default=None)
 
 
     
