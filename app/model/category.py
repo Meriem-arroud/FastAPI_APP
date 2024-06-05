@@ -11,6 +11,7 @@ id_key = Annotated[
 
 class Category(Base):
     """Category SQLAlchemy Model"""
+    
     __tablename__ = 'categories'
     
     id: Mapped[id_key] = mapped_column(init=False)

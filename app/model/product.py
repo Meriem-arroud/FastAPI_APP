@@ -17,10 +17,11 @@ id_key = Annotated[
 ]
 
 class Product(Base):
+    """Product SQLAlchemy Model"""
 
     __tablename__ = 'products'
 
-    id: Mapped[id_key] = mapped_column(init=False, comment='Product ID from Amazon') # type: ignore
+    id: Mapped[id_key] = mapped_column(init=False, comment='Product ID from Amazon') 
     title: Mapped[str] = mapped_column(String(500))
     imgUrl: Mapped[str] = mapped_column(String(100))
     price: Mapped[float] = mapped_column(Float())
@@ -28,7 +29,10 @@ class Product(Base):
     reviews: Mapped[int] = mapped_column(Integer(), default=0)
     category_id: Mapped[int | None] = mapped_column(ForeignKey('categories.id', ondelete='SET NULL'), default=None)
     isBestSeller: Mapped[bool] = mapped_column(Boolean(), default=False)
-    #category: Mapped[Union['Category', None]] = relationship(init=False, backref='products', default=None)
+   #category: Mapped[Union['Category', None]] = relationship(init=False, backref='products', default=None)
+
+
+    
 
 
 

@@ -21,23 +21,43 @@ async def read_product(product_id: str, response: Response):
 
 
 @router.get("", status_code=status.HTTP_200_OK)
-async def read_all_products(offset: int = 0, limit: int = 50):
-    products_count = await product_service.get_products_count()
-    products_list = await product_service.get_products_list(limit=limit, offset=offset)
-    return PaginationResponseSchema(items=products_list, limit=limit, offset=offset, total=products_count)        
+async def read_all_products(response:Response, offset: int = 0, limit: int = 50):
+    """
+    Get all products
+    :param response:
+    :param offset:
+    :param limit:
+    :return:"""
+
+    try:
+        products_count = await product_service.get_products_count()
+        products_list = await product_service.get_products_list(limit=limit, offset=offset)
+        return PaginationResponseSchema(items=products_list, limit=limit, offset=offset, total=products_count)
+    except Exception as e:
+        response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR     
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
 
 @router.post("/create", status_code=status.HTTP_201_CREATED)
-async def create_product(product_data: ProductCreate):
+async def create_product(product_data: ProductCreate, response: Response):
+    """
+    Create new product
+    :param product_data:
+    :return:"""
     try:
         new_product = await product_service.create_product(product_data=product_data)
         return {"status": "succeeded", "message": f"Product successfully created;  New product ID :{new_product.id}"}
     except Exception as e:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+        response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR     
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
 
 @router.delete("/{product_id}", status_code=status.HTTP_200_OK)
-async def delete_product(product_id: str):
+async def delete_product(product_id: str, response: Response):
+    """
+    Delete product by product ID
+    :param product_id:
+    :return:"""
     try:
         await product_service.delete_product(product_id=product_id)
         return {"status": "succeeded", "message": "Product successfully deleted"}
@@ -46,20 +66,34 @@ async def delete_product(product_id: str):
 
 
 @router.put("/{product_id}", status_code=status.HTTP_201_CREATED)
-async def update_product(product_id: str, product_data: ProductCreate):
+async def update_product(product_id: str, product_data: ProductCreate, response:Response):
+    """
+    Update product by product ID
+    :param product_id:
+    :param product_data:
+    :return:"""
     try:
         updated_rows_count = await product_service.update_product(product_id=product_id, product_data=product_data)
-        return {"status": "succeeded", "message": f"Product successfully updated! {updated_rows_count} fiels has been updated"}
+        if updated_rows_count > 0:
+            return {"status": "succeeded", "message": f"Product successfully updated! {updated_rows_count} row has been updated"}
+        else:
+            response.status_code=status.HTTP_404_NOT_FOUND
+            return {"status": "Failed", "message": f"ID {product_id} not found in Products table"}
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e)) 
 
 
 @router.patch("/{product_id}", status_code=status.HTTP_200_OK)
-async def partial_update_product(product_id: str, product_data: ProductUpdate,response:Response):
+async def partial_update_product(product_id: str, product_data: ProductUpdate, response:Response):
+    """
+    Update portion of product by product ID
+    :param product_id:
+    :param product_data:
+    :return:"""
     try:
         updated_rows_count = await product_service.update_product(product_id=product_id, product_data=product_data)
         if updated_rows_count > 0:
-            return {"status": "succeeded", "message": f"Product successfully updated! {updated_rows_count} fiels has been updated"}
+            return {"status": "succeeded", "message": f"Product successfully updated! {updated_rows_count} row has been updated"}
         else:
             response.status_code=status.HTTP_404_NOT_FOUND
             return {"status": "Failed", "message": f"ID {product_id} not found in Products table"}
