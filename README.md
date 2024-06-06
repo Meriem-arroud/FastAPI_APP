@@ -20,8 +20,11 @@ pipenv : pip install pipenv
 Before running the app, you will need to set the database credentials (user and password) as environment variables.
 Below is the syntax for setting the database credentials in macos/linux environment
 ```
+   export POSTGRES_HOST=localhost
    export POSTGRES_USER=<postgres_user_name>
    export POSTGRES_PASSWORD=<postgres_password>
+   export REDIS_HOST=localhost
+
 ```
 
 # Create pipenv environment
