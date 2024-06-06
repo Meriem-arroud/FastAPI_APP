@@ -50,6 +50,12 @@ redis-server
 pipenv run uvicorn main:app -reload
 ```
 
+# To access the app 
+```
+http://localhost:8000/api/v1/docs
+```
+
+
 
 
 
